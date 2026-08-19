@@ -17,7 +17,7 @@ function LandingPage({ onStart }) {
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
-        <button className="nav-cta" onClick={onStart}>Get Started</button>
+       
       </nav>
 
       {/* HERO */}
