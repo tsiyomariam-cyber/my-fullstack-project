@@ -151,11 +151,11 @@ function LandingPage({ onStart }) {
           </div>
           <div className="about-stats">
             <div className="about-stat">
-              <strong>500+</strong>
+              <strong>100+</strong>
               <span>Projects completed</span>
             </div>
             <div className="about-stat">
-              <strong>12 yrs</strong>
+              <strong>4 yrs</strong>
               <span>In business</span>
             </div>
             <div className="about-stat">
