@@ -10,7 +10,7 @@ function LandingPage({ onStart }) {
               <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" fill="white"/>
             </svg>
           </div>
-          DevCraft
+          Afroawi Technologies
         </div>
         <div className="nav-links">
           <a href="#services">Services</a>
@@ -139,7 +139,7 @@ function LandingPage({ onStart }) {
             <p className="section-label">About Us</p>
             <h2 className="section-title">Built by developers,<br />for real businesses.</h2>
             <p>
-              DevCraft is a software development company focused on delivering
+              Afroawi Technologies is a software development company focused on delivering
               clean, maintainable products. We work directly with founders,
               product teams, and businesses of all sizes — no bloated agencies,
               no unnecessary overhead.
@@ -181,9 +181,9 @@ function LandingPage({ onStart }) {
               <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" fill="white"/>
             </svg>
           </div>
-          DevCraft
+          Afroawi Technologies
         </div>
-        <p className="footer-copy">© 2026 DevCraft Software. All rights reserved.</p>
+        <p className="footer-copy">© 2026 Afroawi Technologies. All rights reserved.</p>
       </footer>
 
     </div>
