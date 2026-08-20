@@ -170,6 +170,16 @@ function LandingPage({ onStart }) {
       <section className="cta-section" id="contact">
         <h2>Have a project in mind?</h2>
         <p>Tell us what you need and we'll follow up within 24 hours.</p>
+        <p>
+          <a
+            className="email-link"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=afroawi.tech@gmail.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Email us: afroawi.tech@gmail.com
+          </a>
+        </p>
         <button className="btn-primary" onClick={onStart}>Submit a Request</button>
       </section>
 

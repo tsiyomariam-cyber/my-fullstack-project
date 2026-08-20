@@ -325,6 +325,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1.65;
 }
 
+.email-link {
+  transition: color 0.15s ease;
+}
+
+.email-link:hover {
+  color: #facc15;
+}
+
 /* ── FOOTER ──────────────────────────────────────────────── */
 .footer {
   padding: 26px 56px;
