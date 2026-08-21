@@ -48,7 +48,7 @@ function LandingPage({ onStart }) {
             </div>
             <div className="stat-divider" />
             <div className="stat">
-              <strong>12+</strong>
+              <strong>4+</strong>
               <span>Years Experience</span>
             </div>
           </div>
@@ -155,7 +155,7 @@ function LandingPage({ onStart }) {
               <span>Projects completed</span>
             </div>
             <div className="about-stat">
-              <strong>4 yrs</strong>
+              <strong>4yrs</strong>
               <span>In business</span>
             </div>
             <div className="about-stat">
