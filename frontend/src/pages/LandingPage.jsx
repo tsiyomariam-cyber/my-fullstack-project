@@ -1,3 +1,5 @@
+import afroawiLogo from '../assets/afroawilogo.png';
+
 function LandingPage({ onStart }) {
   return (
     <div className="landing">
@@ -5,12 +7,7 @@ function LandingPage({ onStart }) {
       {/* NAV */}
       <nav className="nav">
         <div className="nav-brand">
-          <div className="nav-logo">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" fill="white"/>
-            </svg>
-          </div>
-          Afroawi Technologies
+          <img className="brand-logo" src={afroawiLogo} alt="Afroawi Technologies" />
         </div>
         <div className="nav-links">
           <a href="#services">Services</a>
@@ -189,12 +186,7 @@ function LandingPage({ onStart }) {
       {/* FOOTER */}
       <footer className="footer">
         <div className="footer-brand">
-          <div className="nav-logo small">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-              <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z" fill="white"/>
-            </svg>
-          </div>
-          Afroawi Technologies
+          <img className="brand-logo footer-logo" src={afroawiLogo} alt="Afroawi Technologies" />
         </div>
         <p className="footer-copy">© 2026 Afroawi Technologies. All rights reserved.</p>
       </footer>
