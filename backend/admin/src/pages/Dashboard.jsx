@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Users from "./Users";
+import afroawiLogo from '../assets/adminlogo.png';
 
 /* ── SVG Icons ────────────────────────────────────────── */
 const IconGrid = () => (
@@ -120,7 +121,9 @@ function Dashboard({ onLogout }) {
         {/* Brand */}
         <div className="sidebar-brand">
           <div className="brand-logo">
-            <div className="brand-icon"><IconBolt /></div>
+            <div className="brand-icon">
+             <img className="brand-logo" src={afroawiLogo} alt="Afroawi Technologies" /> 
+            </div>
             <div>
               <h2>AdminPanel</h2>
               <div className="brand-sub">Management System</div>
