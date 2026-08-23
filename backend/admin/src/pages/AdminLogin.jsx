@@ -26,19 +26,13 @@ function AdminLogin({ onLogin }) {
   };
 
   return (
+   
     <div className="login-container">
+      
       <div className="login-box">
 
         {/* Logo */}
-        <div className="login-logo">
-          <div className="logo-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-              <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z"
-                fill="white" stroke="white" strokeWidth="1.5"
-                strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
+        
 
         <h1>Admin Login</h1>
         <p>Sign in to your admin account</p>
