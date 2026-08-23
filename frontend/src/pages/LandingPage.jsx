@@ -16,6 +16,9 @@ function LandingPage({ onStart }) {
           <a href="#services">Services</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
+          <button className="btn-primary" onClick={onStart}>
+              Get Started
+            </button>
         </div>
        
       </nav>
