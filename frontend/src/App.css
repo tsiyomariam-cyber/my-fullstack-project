@@ -13,14 +13,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: center;
   gap: 8px;
   padding: 11px 22px;
-  background: #6366f1;
-  color: #fff;
+  background: #03f42b;
+  color: #ffffff;
   font-size: 14px;
   font-weight: 600;
   border-radius: 8px;
   transition: background 0.15s;
 }
-.btn-primary:hover { background: #4f46e5; }
+.btn-primary:hover { background: #b5cc22; }
 
 .btn-ghost {
   display: inline-flex;
