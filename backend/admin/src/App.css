@@ -582,9 +582,19 @@ tbody tr:last-child td { border-bottom: none; }
 }
 
 .approve-button,
+.project-button,
 .reject-button {
   display: inline-flex;
   align-items: center;
+
+.project-button {
+  background: var(--brand-600);
+  color: white;
+}
+
+.project-button:hover {
+  background: var(--brand-500);
+}
   gap: 5px;
   padding: 6px 12px;
   border: none;

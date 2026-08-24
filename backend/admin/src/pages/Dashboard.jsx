@@ -327,6 +327,14 @@ function Dashboard({ onLogout }) {
                           </td>
                           <td>
                             <div className="action-buttons">
+                              {r.status.toLowerCase() === "approved" && (
+                                <button
+                                  className="project-button"
+                                  onClick={() => alert(`Create project for ${r.name}`)}
+                                >
+                                  Create Project
+                                </button>
+                              )}
                               <button
                                 className="approve-button"
                                 onClick={() => updateStatus(r.id, "Approved")}
