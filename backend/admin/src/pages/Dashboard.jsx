@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import Users from "./Users";
+import Projects from "./projects";
+import CreateProject from "./CreateProject";
+import ProjectDetails from "./ProjectDetails";
 import afroawiLogo from '../assets/adminlogo.png';
 
 /* ── SVG Icons ────────────────────────────────────────── */
@@ -22,12 +25,18 @@ const IconUsers = () => (
     <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
   </svg>
 );
+const IconProjects = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" />
+  </svg>
+);
 const IconBolt = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
     <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z"
       fill="white" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
   </svg>
 );
+// IconBolt kept for potential future sidebar brand use
 const IconLogout = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -77,6 +86,17 @@ function formatDateTime(raw) {
 function Dashboard({ onLogout }) {
   const [activePage, setActivePage] = useState("dashboard");
   const [requests, setRequests] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  // Update a project in the projects array by id
+  const updateProject = (updatedProject) => {
+    setProjects((prev) =>
+      prev.map((p) => (p.id === updatedProject.id ? updatedProject : p))
+    );
+    setSelectedProject(updatedProject); // keep details view in sync
+  };
 
   const getRequests = async () => {
     try {
@@ -105,12 +125,40 @@ function Dashboard({ onLogout }) {
     }
   };
 
-  const pageTitle    = { dashboard: "Dashboard", requests: "Requests", users: "Users" };
+  const pageTitle    = { dashboard: "Dashboard", requests: "Requests", projects: "Projects", users: "Users" };
   const pageSubtitle = {
     dashboard: "Overview of all user requests",
     requests:  "Review and manage incoming requests",
+    projects:  "Track and manage your projects",
     users:     "Manage registered users",
   };
+
+  // When a request is selected, show the CreateProject form instead of the dashboard
+  if (selectedRequest) {
+    return (
+      <CreateProject
+        request={selectedRequest}
+        onCancel={() => setSelectedRequest(null)}
+        onProjectCreated={(newProject) => {
+          setProjects((prev) => [...prev, newProject]);
+          setSelectedRequest(null);
+        }}
+      />
+    );
+  }
+
+  // When a project is selected, show ProjectDetails
+  if (selectedProject) {
+    return (
+      <ProjectDetails
+        project={selectedProject}
+        onBack={() => setSelectedProject(null)}
+        onUpdate={(updatedProject) => {
+          updateProject(updatedProject);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="admin-layout">
@@ -159,6 +207,14 @@ function Dashboard({ onLogout }) {
             <span className="nav-icon"><IconUsers /></span>
             Users
           </button>
+
+          <button
+            className={activePage === "projects" ? "active" : ""}
+            onClick={() => setActivePage("projects")}
+          >
+            <span className="nav-icon"><IconProjects /></span>
+            Projects
+          </button>
         </nav>
 
         {/* Footer */}
@@ -189,6 +245,16 @@ function Dashboard({ onLogout }) {
             </button>
           </div>
         </header>
+
+        {/* Users page */}
+        {activePage === "projects" && (
+          <section className="requests-section">
+            <Projects
+              projects={projects}
+              onViewProject={(project) => setSelectedProject(project)}
+            />
+          </section>
+        )}
 
         {/* Users page */}
         {activePage === "users" && (
@@ -330,7 +396,7 @@ function Dashboard({ onLogout }) {
                               {r.status.toLowerCase() === "approved" && (
                                 <button
                                   className="project-button"
-                                  onClick={() => alert(`Create project for ${r.name}`)}
+                                onClick={() => setSelectedRequest(r)}
                                 >
                                   Create Project
                                 </button>
