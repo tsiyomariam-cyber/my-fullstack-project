@@ -6,6 +6,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
   const [newStatus, setNewStatus]     = useState(project.status);
   const [progressError, setProgressError] = useState("");
   const [paymentError, setPaymentError]   = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   /* ── helpers ──────────────────────────────────────────── */
   const paidPct = project.totalAmount > 0
@@ -20,7 +21,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
   };
 
   /* ── update progress ──────────────────────────────────── */
-  const handleProgressUpdate = () => {
+  const handleProgressUpdate = async () => {
     const val = Number(newProgress);
     if (isNaN(val) || val < 0 || val > 100) {
       setProgressError("Enter a value between 0 and 100.");
@@ -33,15 +34,41 @@ function ProjectDetails({ project, onBack, onUpdate }) {
       val === 100 ? "Completed"   :
       "In Progress";
 
-    onUpdate({
-      ...project,
-      progress: val,
-      status: autoStatus,
-    });
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          progress: val,
+          paidAmount: project.paidAmount,
+          remainingAmount: project.remainingAmount,
+          status: autoStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update progress");
+      }
+
+      onUpdate({
+        ...project,
+        progress: val,
+        status: autoStatus,
+      });
+
+      alert("Progress updated successfully!");
+    } catch (error) {
+      setProgressError(`Error: ${error.message}`);
+      console.error("Error updating progress:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   /* ── add payment ──────────────────────────────────────── */
-  const handlePaymentAdd = () => {
+  const handlePaymentAdd = async () => {
     const val = Number(newPayment);
     if (!newPayment || isNaN(val) || val <= 0) {
       setPaymentError("Enter a valid payment amount.");
@@ -54,18 +81,73 @@ function ProjectDetails({ project, onBack, onUpdate }) {
       return;
     }
     setPaymentError("");
-    setNewPayment("");
 
-    onUpdate({
-      ...project,
-      paidAmount:      newPaid,
-      remainingAmount: newRemaining,
-    });
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          progress: project.progress,
+          paidAmount: newPaid,
+          remainingAmount: newRemaining,
+          status: project.status,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to add payment");
+      }
+
+      setNewPayment("");
+      onUpdate({
+        ...project,
+        paidAmount: newPaid,
+        remainingAmount: newRemaining,
+      });
+
+      alert("Payment added successfully!");
+    } catch (error) {
+      setPaymentError(`Error: ${error.message}`);
+      console.error("Error adding payment:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   /* ── update status manually ───────────────────────────── */
-  const handleStatusUpdate = () => {
-    onUpdate({ ...project, status: newStatus });
+  const handleStatusUpdate = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          progress: project.progress,
+          paidAmount: project.paidAmount,
+          remainingAmount: project.remainingAmount,
+          status: newStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update status");
+      }
+
+      onUpdate({ 
+        ...project, 
+        status: newStatus 
+      });
+
+      alert("Status updated successfully!");
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+      console.error("Error updating status:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -140,9 +222,14 @@ function ProjectDetails({ project, onBack, onUpdate }) {
                 value={newProgress}
                 onChange={(e) => setNewProgress(e.target.value)}
                 placeholder="0 – 100"
+                disabled={isLoading}
               />
-              <button className="pd-btn-primary" onClick={handleProgressUpdate}>
-                Save Progress
+              <button 
+                className="pd-btn-primary" 
+                onClick={handleProgressUpdate}
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : "Save Progress"}
               </button>
             </div>
             {progressError && <p className="pd-error">{progressError}</p>}
@@ -171,9 +258,14 @@ function ProjectDetails({ project, onBack, onUpdate }) {
                 value={newPayment}
                 onChange={(e) => setNewPayment(e.target.value)}
                 placeholder="Amount in ETB"
+                disabled={isLoading}
               />
-              <button className="pd-btn-primary" onClick={handlePaymentAdd}>
-                Add Payment
+              <button 
+                className="pd-btn-primary" 
+                onClick={handlePaymentAdd}
+                disabled={isLoading}
+              >
+                {isLoading ? "Adding..." : "Add Payment"}
               </button>
             </div>
             {paymentError && <p className="pd-error">{paymentError}</p>}
@@ -189,14 +281,19 @@ function ProjectDetails({ project, onBack, onUpdate }) {
               <select
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value)}
+                disabled={isLoading}
               >
                 <option>Not Started</option>
                 <option>In Progress</option>
                 <option>On Hold</option>
                 <option>Completed</option>
               </select>
-              <button className="pd-btn-primary" onClick={handleStatusUpdate}>
-                Update Status
+              <button 
+                className="pd-btn-primary" 
+                onClick={handleStatusUpdate}
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : "Update Status"}
               </button>
             </div>
           </div>

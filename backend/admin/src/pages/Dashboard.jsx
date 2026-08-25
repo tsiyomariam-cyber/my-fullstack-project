@@ -108,7 +108,20 @@ function Dashboard({ onLogout }) {
     }
   };
 
-  useEffect(() => { getRequests(); }, []);
+  const getProjects = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/projects");
+      const data = await res.json();
+      setProjects(data);
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    }
+  };
+
+  useEffect(() => {
+    getRequests();
+    getProjects();
+  }, []);
 
   const updateStatus = async (id, status) => {
     try {
@@ -140,7 +153,8 @@ function Dashboard({ onLogout }) {
         request={selectedRequest}
         onCancel={() => setSelectedRequest(null)}
         onProjectCreated={(newProject) => {
-          setProjects((prev) => [...prev, newProject]);
+          getProjects();
+          getRequests();
           setSelectedRequest(null);
         }}
       />
@@ -393,26 +407,46 @@ function Dashboard({ onLogout }) {
                           </td>
                           <td>
                             <div className="action-buttons">
-                              {r.status.toLowerCase() === "approved" && (
+                              {r.status.toLowerCase() === "approved" && !projects.some(p => p.requestId === r.id) && (
+                                <>
+                                  <button
+                                    className="project-button"
+                                    onClick={() => setSelectedRequest(r)}
+                                  >
+                                    Create Project
+                                  </button>
+                                  <button
+                                    className="reject-button"
+                                    onClick={() => updateStatus(r.id, "Rejected")}
+                                  >
+                                    <IconX /> Reject
+                                  </button>
+                                </>
+                              )}
+                              {r.status.toLowerCase() === "pending" && (
+                                <>
+                                  <button
+                                    className="approve-button"
+                                    onClick={() => updateStatus(r.id, "Approved")}
+                                  >
+                                    <IconCheck /> Approve
+                                  </button>
+                                  <button
+                                    className="reject-button"
+                                    onClick={() => updateStatus(r.id, "Rejected")}
+                                  >
+                                    <IconX /> Reject
+                                  </button>
+                                </>
+                              )}
+                              {r.status.toLowerCase() === "rejected" && (
                                 <button
-                                  className="project-button"
-                                onClick={() => setSelectedRequest(r)}
+                                  className="approve-button"
+                                  onClick={() => updateStatus(r.id, "Approved")}
                                 >
-                                  Create Project
+                                  <IconCheck /> Approve
                                 </button>
                               )}
-                              <button
-                                className="approve-button"
-                                onClick={() => updateStatus(r.id, "Approved")}
-                              >
-                                <IconCheck /> Approve
-                              </button>
-                              <button
-                                className="reject-button"
-                                onClick={() => updateStatus(r.id, "Rejected")}
-                              >
-                                <IconX /> Reject
-                              </button>
                             </div>
                           </td>
                         </tr>

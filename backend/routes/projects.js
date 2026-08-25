@@ -7,62 +7,75 @@ const db      = require("../config/database");
 // ======================================
 
 router.post("/", (req, res) => {
-    const {
-        requestId,
-        clientName,
-        clientEmail,
-        clientPhone,
-        projectName,
-        description,
-        startDate,
-        deadline,
-        totalAmount,
-        paidAmount,
-        remainingAmount,
-    } = req.body;
+    try {
+        const {
+            requestId,
+            clientName,
+            clientEmail,
+            clientPhone,
+            projectName,
+            description,
+            startDate,
+            deadline,
+            totalAmount,
+            paidAmount,
+        } = req.body;
 
-    if (!projectName || !clientName || !clientEmail || !totalAmount) {
-        return res.status(400).json({
-            message: "projectName, clientName, clientEmail and totalAmount are required"
-        });
-    }
-
-    const sql = `
-        INSERT INTO projects
-            (request_id, client_name, client_email, client_phone,
-             project_name, description, start_date, deadline,
-             total_amount, paid_amount, remaining_amount,
-             progress, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'Not Started')
-    `;
-
-    const values = [
-        requestId    || null,
-        clientName,
-        clientEmail,
-        clientPhone  || null,
-        projectName,
-        description  || null,
-        startDate    || null,
-        deadline     || null,
-        Number(totalAmount),
-        Number(paidAmount)      || 0,
-        Number(remainingAmount) || Number(totalAmount),
-    ];
-
-    db.query(sql, values, (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: "Error creating project",
-                error: err.message
+        // Validation
+        if (!projectName || !clientName || !clientEmail || !totalAmount) {
+            return res.status(400).json({
+                message: "projectName, clientName, clientEmail and totalAmount are required"
             });
         }
 
-        res.status(201).json({
-            message: "Project created successfully",
-            projectId: result.insertId
+        const paidAmt = Number(paidAmount) || 0;
+        const totalAmt = Number(totalAmount);
+        const remainingAmt = totalAmt - paidAmt;
+
+        const sql = `
+            INSERT INTO projects
+                (request_id, client_name, client_email, client_phone,
+                 project_name, description, start_date, deadline,
+                 total_amount, paid_amount, remaining_amount,
+                 progress, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'Not Started')
+        `;
+
+        const values = [
+            requestId    || null,
+            clientName,
+            clientEmail,
+            clientPhone  || null,
+            projectName,
+            description  || null,
+            startDate    || null,
+            deadline     || null,
+            totalAmt,
+            paidAmt,
+            remainingAmt,
+        ];
+
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                console.error("Database error:", err);
+                return res.status(500).json({
+                    message: "Error creating project",
+                    error: err.message
+                });
+            }
+
+            res.status(201).json({
+                message: "Project created successfully",
+                projectId: result.insertId
+            });
         });
-    });
+    } catch (error) {
+        console.error("Server error:", error);
+        res.status(500).json({
+            message: "Server error",
+            error: error.message
+        });
+    }
 });
 
 // ======================================

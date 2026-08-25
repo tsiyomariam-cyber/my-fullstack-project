@@ -12,7 +12,7 @@ function LandingPage({ onStart }) {
         <div className="nav-links">
           <a href="#services">Services</a>
           <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="#team">Join our Team</a>
           <button className="btn-primary" onClick={onStart}>
               Get Started
             </button>

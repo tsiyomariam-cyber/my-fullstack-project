@@ -7,8 +7,9 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
   const [totalAmount, setTotalAmount] = useState("");
   const [initialPayment, setInitialPayment] = useState("");
   const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!projectName.trim()) {
@@ -36,33 +37,69 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
       return;
     }
 
-    const newProject = {
-      id: Date.now(),
-      requestId: request.id,
-      clientName: request.name,
-      clientEmail: request.email,
-      clientPhone: request.phone,
-      requestText: request.request_text,
-      projectName: projectName.trim(),
-      description: description.trim(),
-      startDate,
-      deadline,
-      totalAmount: Number(totalAmount),
-      paidAmount: Number(initialPayment) || 0,
-      remainingAmount: Number(totalAmount) - (Number(initialPayment) || 0),
-      progress: 0,
-      status: "Not Started",
-      createdAt: new Date().toISOString(),
-    };
+    setIsLoading(true);
 
-    if (onProjectCreated) {
-      onProjectCreated(newProject);
-    }
+    try {
+      // Send project data to backend API
+      const response = await fetch("http://localhost:5000/api/projects", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          requestId: request.id,
+          clientName: request.name,
+          clientEmail: request.email,
+          clientPhone: request.phone,
+          projectName: projectName.trim(),
+          description: description.trim(),
+          startDate,
+          deadline,
+          totalAmount: Number(totalAmount),
+          paidAmount: Number(initialPayment) || 0,
+        }),
+      });
 
-    alert("Project created successfully!");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create project");
+      }
 
-    if (onCancel) {
-      onCancel();
+      const result = await response.json();
+
+      // Create local project object for state update
+      const newProject = {
+        id: result.projectId,
+        requestId: request.id,
+        clientName: request.name,
+        clientEmail: request.email,
+        clientPhone: request.phone,
+        requestText: request.request_text,
+        projectName: projectName.trim(),
+        description: description.trim(),
+        startDate,
+        deadline,
+        totalAmount: Number(totalAmount),
+        paidAmount: Number(initialPayment) || 0,
+        remainingAmount: Number(totalAmount) - (Number(initialPayment) || 0),
+        progress: 0,
+        status: "Not Started",
+      };
+
+      if (onProjectCreated) {
+        onProjectCreated(newProject);
+      }
+
+      alert("Project created successfully!");
+
+      if (onCancel) {
+        onCancel();
+      }
+    } catch (error) {
+      alert(`Error: ${error.message}`);
+      console.error("Error creating project:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -327,8 +364,9 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
             <button
               type="submit"
               className="submit-project-button"
+              disabled={isLoading}
             >
-              ✓ Create Project
+              {isLoading ? "Creating..." : "✓ Create Project"}
             </button>
 
           </div>
