@@ -1,4 +1,5 @@
 import afroawiLogo from '../assets/afroawilogo.png';
+import photowelcome from '../assets/photowelcome.png';
 
 function LandingPage({ onStart }) {
   return (
@@ -38,7 +39,7 @@ function LandingPage({ onStart }) {
 
           <div className="hero-stats">
             <div className="stat">
-              <strong>500+</strong>
+              <strong>100+</strong>
               <span>Projects Delivered</span>
             </div>
             <div className="stat-divider" />
@@ -53,6 +54,13 @@ function LandingPage({ onStart }) {
             </div>
           </div>
         </div>
+        <div className="hero-image-container">
+    <img
+      src={photowelcome}
+      alt="Software development"
+      className="hero-image"
+    />
+  </div>
       </section>
 
       {/* SERVICES */}
