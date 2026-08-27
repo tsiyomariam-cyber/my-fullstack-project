@@ -2,7 +2,7 @@
 
 /* ── RESET ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body   { font-family: 'Inter', system-ui, sans-serif; background: #0d1117; color: #e2e8f0; -webkit-font-smoothing: antialiased; }
+body   { font-family: 'Inter', system-ui, sans-serif; background: #06080a; color: #e2e8f0; -webkit-font-smoothing: antialiased; }
 a      { text-decoration: none; color: inherit; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
