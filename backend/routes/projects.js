@@ -123,18 +123,28 @@ router.get("/", (req, res) => {
 router.put("/:id", (req, res) => {
     const { id } = req.params;
     const { progress, paidAmount, remainingAmount, status } = req.body;
+    const numericProgress = Number(progress);
+    const numericPaidAmount = Number(paidAmount);
+
+    if (!Number.isFinite(numericProgress) || numericProgress < 0 || numericProgress > 100) {
+        return res.status(400).json({ message: "Progress must be between 0 and 100" });
+    }
+
+    if (!Number.isFinite(numericPaidAmount) || numericPaidAmount < 0) {
+        return res.status(400).json({ message: "Paid amount must be a non-negative number" });
+    }
 
     const sql = `
         UPDATE projects
         SET
             progress         = ?,
             paid_amount      = ?,
-            remaining_amount = ?,
+            remaining_amount = total_amount - ?,
             status           = ?
         WHERE id = ?
     `;
 
-    db.query(sql, [progress, paidAmount, remainingAmount, status, id], (err, result) => {
+    db.query(sql, [numericProgress, numericPaidAmount, numericPaidAmount, status, id], (err, result) => {
         if (err) {
             return res.status(500).json({
                 message: "Error updating project",

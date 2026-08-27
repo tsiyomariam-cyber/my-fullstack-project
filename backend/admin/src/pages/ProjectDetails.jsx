@@ -8,16 +8,19 @@ function ProjectDetails({ project, onBack, onUpdate }) {
   const [paymentError, setPaymentError]   = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const totalAmount = Number(project.totalAmount) || 0;
+  const paidAmount = Number(project.paidAmount) || 0;
+
   /* ── helpers ──────────────────────────────────────────── */
-  const paidPct = project.totalAmount > 0
-    ? Math.round((project.paidAmount / project.totalAmount) * 100)
+  const paidPct = totalAmount > 0
+    ? Math.round((paidAmount / totalAmount) * 100)
     : 0;
 
   const statusColor = {
     "Not Started": "#94a3b8",
     "In Progress":  "#f59e0b",
-    "Completed":    "#22c55e",
-    "On Hold":      "#ef4444",
+    "Completed":    "#e20c0c",
+    "On Hold":      "#06bc48",
   };
 
   /* ── update progress ──────────────────────────────────── */
@@ -41,8 +44,8 @@ function ProjectDetails({ project, onBack, onUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           progress: val,
-          paidAmount: project.paidAmount,
-          remainingAmount: project.remainingAmount,
+          paidAmount,
+          remainingAmount: totalAmount - paidAmount,
           status: autoStatus,
         }),
       });
@@ -74,9 +77,9 @@ function ProjectDetails({ project, onBack, onUpdate }) {
       setPaymentError("Enter a valid payment amount.");
       return;
     }
-    const newPaid      = project.paidAmount + val;
-    const newRemaining = project.totalAmount - newPaid;
-    if (newPaid > project.totalAmount) {
+    const newPaid      = paidAmount + val;
+    const newRemaining = totalAmount - newPaid;
+    if (newPaid > totalAmount) {
       setPaymentError("Payment exceeds remaining balance.");
       return;
     }
@@ -125,8 +128,8 @@ function ProjectDetails({ project, onBack, onUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           progress: project.progress,
-          paidAmount: project.paidAmount,
-          remainingAmount: project.remainingAmount,
+          paidAmount,
+          remainingAmount: totalAmount - paidAmount,
           status: newStatus,
         }),
       });
@@ -177,16 +180,16 @@ function ProjectDetails({ project, onBack, onUpdate }) {
         <div className="pd-info-row">
           <div className="pd-info-card">
             <span>Total Amount</span>
-            <strong>{project.totalAmount.toLocaleString()} ETB</strong>
+            <strong>{totalAmount.toLocaleString()} ETB</strong>
           </div>
           <div className="pd-info-card">
             <span>Paid</span>
-            <strong className="pd-green">{project.paidAmount.toLocaleString()} ETB</strong>
+            <strong className="pd-green">{paidAmount.toLocaleString()} ETB</strong>
           </div>
           <div className="pd-info-card">
             <span>Remaining</span>
             <strong className="pd-red">
-              {(project.totalAmount - project.paidAmount).toLocaleString()} ETB
+              {(totalAmount - paidAmount).toLocaleString()} ETB
             </strong>
           </div>
           <div className="pd-info-card">
