@@ -1,5 +1,6 @@
 import { useState } from "react";
 import photowelcome from '../assets/photowelcome.png';
+import adminLogo from '../assets/adminlogo.png';
 
 function AdminLogin({ onLogin }) {
   const [username, setUsername] = useState("");
@@ -32,8 +33,9 @@ function AdminLogin({ onLogin }) {
       
       <div className="login-box">
 
-        {/* Logo */}
-        
+        <div className="login-logo-container">
+          <img className="login-logo" src={adminLogo} alt="Afroawi Technologies" />
+        </div>
 
         <h1>Admin Login</h1>
         <p>Sign in to your admin account</p>
