@@ -183,9 +183,7 @@ function Dashboard({ onLogout }) {
         {/* Brand */}
         <div className="sidebar-brand">
           <div className="brand-logo">
-            <div className="brand-icon">
-             <img className="brand-logo" src={afroawiLogo} alt="Afroawi Technologies" /> 
-            </div>
+            <img className="dashboard-logo" src={afroawiLogo} alt="Afroawi Technologies" />
             <div>
               <h2>AdminPanel</h2>
               <div className="brand-sub">Management System</div>

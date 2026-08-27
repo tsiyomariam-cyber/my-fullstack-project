@@ -225,16 +225,14 @@ a { text-decoration: none; }
   gap: 11px;
 }
 
-.brand-icon {
+.dashboard-logo {
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--brand-600), #3b82f6);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(79,70,229,.4);
+  object-fit: contain;
 }
 
 .sidebar h2 {
