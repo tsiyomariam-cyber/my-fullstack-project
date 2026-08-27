@@ -1,9 +1,10 @@
 import { useState } from "react";
+import photowelcome from '../assets/photowelcome.png';
 
 function AdminLogin({ onLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
