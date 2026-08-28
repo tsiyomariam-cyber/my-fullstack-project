@@ -1,5 +1,14 @@
 import React, { useState } from "react";
 
+const getTodayDate = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
+
 function CreateProject({ request, onCancel, onProjectCreated }) {
   const [projectName, setProjectName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -8,6 +17,7 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
   const [initialPayment, setInitialPayment] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const today = getTodayDate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +28,10 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
     }
     if (!startDate) {
       alert("Please select the start date.");
+      return;
+    }
+    if (startDate < today) {
+      alert("Starting date cannot be in the past.");
       return;
     }
     if (!deadline) {
@@ -223,6 +237,7 @@ function CreateProject({ request, onCancel, onProjectCreated }) {
                 <input
                   type="date"
                   value={startDate}
+                  min={today}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
               </div>
