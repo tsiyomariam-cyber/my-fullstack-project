@@ -10,6 +10,8 @@ function ProjectDetails({ project, onBack, onUpdate }) {
 
   const totalAmount = Number(project.totalAmount) || 0;
   const paidAmount = Number(project.paidAmount) || 0;
+  const remainingAmount = totalAmount - paidAmount;
+  const canComplete = project.progress === 100 && paidAmount >= totalAmount && remainingAmount === 0;
 
   /* ── helpers ──────────────────────────────────────────── */
   const paidPct = totalAmount > 0
@@ -34,7 +36,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
 
     const autoStatus =
       val === 0   ? "Not Started" :
-      val === 100 ? "Completed"   :
+      val === 100 && canComplete ? "Completed"   :
       "In Progress";
 
     setIsLoading(true);
@@ -45,7 +47,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
         body: JSON.stringify({
           progress: val,
           paidAmount,
-          remainingAmount: totalAmount - paidAmount,
+          remainingAmount,
           status: autoStatus,
         }),
       });
@@ -121,6 +123,11 @@ function ProjectDetails({ project, onBack, onUpdate }) {
 
   /* ── update status manually ───────────────────────────── */
   const handleStatusUpdate = async () => {
+    if (newStatus === "Completed" && !canComplete) {
+      alert("Project can be completed only when progress and payment are both 100%.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
@@ -129,7 +136,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
         body: JSON.stringify({
           progress: project.progress,
           paidAmount,
-          remainingAmount: totalAmount - paidAmount,
+          remainingAmount,
           status: newStatus,
         }),
       });
@@ -289,7 +296,7 @@ function ProjectDetails({ project, onBack, onUpdate }) {
                 <option>Not Started</option>
                 <option>In Progress</option>
                 <option>On Hold</option>
-                <option>Completed</option>
+                <option disabled={!canComplete}>Completed</option>
               </select>
               <button 
                 className="pd-btn-primary" 
@@ -299,6 +306,11 @@ function ProjectDetails({ project, onBack, onUpdate }) {
                 {isLoading ? "Updating..." : "Update Status"}
               </button>
             </div>
+            {!canComplete && (
+              <p className="pd-error">
+                Project can be completed only when progress and payment are both 100%.
+              </p>
+            )}
           </div>
         </div>
 

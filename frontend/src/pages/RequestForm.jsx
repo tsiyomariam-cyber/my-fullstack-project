@@ -124,7 +124,7 @@ function RequestForm({ onBack }) {
             <label>Phone Number <span className="optional">(optional)</span></label>
             <input
               type="tel"
-              placeholder="+1 (555) 000-0000"
+              placeholder="+251 000-000-000"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />

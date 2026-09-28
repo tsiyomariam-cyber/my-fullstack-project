@@ -134,29 +134,51 @@ router.put("/:id", (req, res) => {
         return res.status(400).json({ message: "Paid amount must be a non-negative number" });
     }
 
-    const sql = `
-        UPDATE projects
-        SET
-            progress         = ?,
-            paid_amount      = ?,
-            remaining_amount = total_amount - ?,
-            status           = ?
-        WHERE id = ?
-    `;
-
-    db.query(sql, [numericProgress, numericPaidAmount, numericPaidAmount, status, id], (err, result) => {
+    db.query("SELECT total_amount AS totalAmount FROM projects WHERE id = ?", [id], (err, projects) => {
         if (err) {
             return res.status(500).json({
-                message: "Error updating project",
+                message: "Error checking project",
                 error: err.message
             });
         }
 
-        if (result.affectedRows === 0) {
+        if (projects.length === 0) {
             return res.status(404).json({ message: "Project not found" });
         }
 
-        res.json({ message: "Project updated successfully" });
+        const totalAmount = Number(projects[0].totalAmount);
+        const remainingBalance = totalAmount - numericPaidAmount;
+
+        if (status === "Completed" && (numericProgress !== 100 || numericPaidAmount < totalAmount || remainingBalance !== 0)) {
+            return res.status(400).json({
+                message: "Project can be completed only when progress and payment are both 100% and the remaining balance is 0."
+            });
+        }
+
+        const sql = `
+            UPDATE projects
+            SET
+                progress         = ?,
+                paid_amount      = ?,
+                remaining_amount = total_amount - ?,
+                status           = ?
+            WHERE id = ?
+        `;
+
+        db.query(sql, [numericProgress, numericPaidAmount, numericPaidAmount, status, id], (updateErr, result) => {
+            if (updateErr) {
+                return res.status(500).json({
+                    message: "Error updating project",
+                    error: updateErr.message
+                });
+            }
+
+            if (result.affectedRows === 0) {
+                return res.status(404).json({ message: "Project not found" });
+            }
+
+            res.json({ message: "Project updated successfully" });
+        });
     });
 });
 
