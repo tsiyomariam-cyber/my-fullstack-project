@@ -3,7 +3,7 @@ import Users from "./Users";
 import Projects from "./projects";
 import CreateProject from "./CreateProject";
 import ProjectDetails from "./ProjectDetails";
-import afroawiLogo from '../assets/adminlogo.png';
+import afroawiLogo from '../assets/logo1_4.png';
 
 /* ── SVG Icons ────────────────────────────────────────── */
 const IconGrid = () => (

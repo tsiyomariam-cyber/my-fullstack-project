@@ -1,4 +1,4 @@
-import afroawiLogo from '../assets/afroawilogo.png';
+import afroawiLogo from '../assets/logo1_4.png';
 import photowelcome from '../assets/photowelcome.png';
 
 function LandingPage({ onStart }) {

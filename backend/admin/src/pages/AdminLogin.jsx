@@ -1,6 +1,6 @@
 import { useState } from "react";
 import photowelcome from '../assets/photowelcome.png';
-import adminLogo from '../assets/adminlogo.png';
+import adminLogo from '../assets/logo1_4.png';
 
 function AdminLogin({ onLogin }) {
   const [username, setUsername] = useState("");

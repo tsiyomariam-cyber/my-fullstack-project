@@ -76,7 +76,7 @@ a { text-decoration: none; }
   width: 100%;
   max-width: 600px;
   padding: 40px 36px 44px;
-  background: rgba(255,255,255,.03);
+  background: rgba(230, 225, 225, 0.03);
   border: 1px solid rgba(137, 130, 130, 0.08);
   border-radius: 18px;
   box-shadow:
@@ -111,7 +111,7 @@ a { text-decoration: none; }
 }
 .login-logo {
   display: block;
-  width: 50px;
+  width: 130px;
   height: 50px;
   margin: 0 auto;
   object-fit: contain;
@@ -211,7 +211,7 @@ a { text-decoration: none; }
   display: flex;
   flex-direction: column;
   z-index: 200;
-  border-right: 1px solid rgba(255,255,255,.05);
+  border-right: 1px solid rgba(157, 124, 124, 0.79);
 }
 
 /* Brand */
@@ -227,7 +227,7 @@ a { text-decoration: none; }
 }
 
 .dashboard-logo {
-  width: 36px;
+  width: 90px;
   height: 36px;
   display: flex;
   align-items: center;
@@ -245,7 +245,7 @@ a { text-decoration: none; }
 
 .brand-sub {
   font-size: 11px;
-  color: rgba(255,255,255,.28);
+  color: rgba(229, 225, 225, 0.28);
   font-weight: 400;
   letter-spacing: .3px;
   margin-top: 1px;
@@ -258,7 +258,7 @@ a { text-decoration: none; }
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: rgba(255,255,255,.22);
+  color: rgba(248, 231, 231, 0.918);
 }
 
 /* Nav buttons */
@@ -274,7 +274,7 @@ a { text-decoration: none; }
   padding: 10px 14px;
   border: none;
   background: transparent;
-  color: rgba(255,255,255,.45);
+  color: rgba(255, 255, 255, 0.945);
   text-align: left;
   border-radius: 9px;
   cursor: pointer;
@@ -720,12 +720,47 @@ tbody tr:last-child td { border-bottom: none; }
 .projects-card-header {
   padding: 24px;
   border-bottom: 1px solid #edf0f3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .projects-card-header h2 {
   margin: 0;
   font-size: 18px;
   color: #111827;
+}
+
+.project-status-filter {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: #f1f3f6;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+}
+
+.project-status-filter button {
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.project-status-filter button.active {
+  background: white;
+  color: #2563eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.project-status-filter button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .table-container {

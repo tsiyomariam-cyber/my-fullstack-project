@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Projects({ projects = [], onViewProject }) {
+  const [statusFilter, setStatusFilter] = useState("All Projects");
+  const visibleProjects = statusFilter === "All Projects"
+    ? projects
+    : projects.filter((project) => project.status === statusFilter);
 
   return (
     <div className="projects-page">
@@ -16,12 +20,29 @@ function Projects({ projects = [], onViewProject }) {
 
       <div className="projects-card">
         <div className="projects-card-header">
-          <h2>All Projects</h2>
+          <h2>{statusFilter}</h2>
+          <div className="project-status-filter" role="group" aria-label="Filter projects by status">
+            {["All Projects", "In Progress", "Completed"].map((filter) => (
+              <button
+                key={filter}
+                type="button"
+                className={statusFilter === filter ? "active" : ""}
+                aria-pressed={statusFilter === filter}
+                onClick={() => setStatusFilter(filter)}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
         </div>
 
         {projects.length === 0 ? (
           <div className="projects-empty">
             <p>No projects yet.</p>
+          </div>
+        ) : visibleProjects.length === 0 ? (
+          <div className="projects-empty">
+            <p>No {statusFilter.toLowerCase()} projects.</p>
           </div>
         ) : (
           <div className="table-container">
@@ -41,7 +62,7 @@ function Projects({ projects = [], onViewProject }) {
               </thead>
 
               <tbody>
-                {projects.map((project) => {
+                {visibleProjects.map((project) => {
                   const remaining =
                     project.totalAmount - project.paidAmount;
 
